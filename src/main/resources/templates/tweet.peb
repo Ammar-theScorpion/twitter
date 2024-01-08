@@ -56,8 +56,7 @@
                             hx-post="/api/tweet/getComments"
                             hx-vals='{"tweet-id": {{tweet.tweetId}} }'
                             hx-target="#pop"
-                            hx-swap-oob="true"
-                            hx-swap="innerHTML">
+                            hx-swap="afterbegin">
 
                             <h6 href="#" class="text-body text-opacity-50 text-decoration-none d-block p-2"> 
                             <i class="far fa-comment me-1 d-block d-sm-inline">

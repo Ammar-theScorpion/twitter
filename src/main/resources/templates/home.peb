@@ -1,6 +1,7 @@
 {% extends 'templates/nav.html' %}
 
 {% block code %}
+		{% include "templates/popup.html" %}
 	
 	<section id="make-post"  class="position-absolute top-50 start-50 translate-middle">
 
@@ -79,7 +80,6 @@
 			{% endfor %}
 		</section>
 		
-		{% include "templates/popup.html" %}
 	</div>
 	<script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -96,8 +96,8 @@
 
 					let topPosition = Math.max(0, (screenHeight - popupHeight) / 2 + scrollY);
 					popElement.style.top = topPosition + 'px';
+		            $(".overlay").show();
 
-		            $('body').css('background-color', 'rgba(0, 0, 0, 0.5)');
 		 		}
 			if (evt.detail.target.id == 'posts') {
 

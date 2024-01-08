@@ -12,9 +12,9 @@
     box-shadow: 0 0 2px 5px #00000096;
     position: absolute;
     left: 50%;
-    height: 80vh;
-    width: 80%;
-    transform: translate(-50%, -10%);
+    height: 60vh;
+    width: 77%;
+    transform: translate(-50%, -7%);
 
     color: #172b4d;
     & .head {

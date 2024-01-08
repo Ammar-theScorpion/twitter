@@ -52,15 +52,15 @@ public class TwitterControllerAPI {
         String comment = ctx.formParam("comment");
         String userName = ctx.sessionAttribute("currentUser");
         Integer userId = userService.findIdByName(userName);
-        System.err.println(comment);
 
         tweetService.comment(tweetId, userId, comment);
     };
 
     public Handler getTweetComments = ctx -> {
         Integer tweetId = Integer.parseInt(ctx.formParam("tweet-id"));
-        System.err.println(tweetId);
-        ctx.json(tweetService.getComments(tweetId));
+        Map<String, Object> model = new HashMap<>();
+        model.put("tweets", tweetService.getComments(tweetId));
+        ctx.render("templates/comments.peb", model);
     };
 
     public Handler retweet = ctx -> {

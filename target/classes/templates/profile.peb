@@ -33,7 +33,7 @@
 
 
             {% for tweet in tweets %}
-			    {% include 'templates/tweet.html' %}
+			    {% include 'templates/tweet.peb' %}
 		    {% endfor %}
         </div>
 
