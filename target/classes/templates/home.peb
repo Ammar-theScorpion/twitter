@@ -1,66 +1,85 @@
 {% extends 'templates/nav.html' %}
 
 {% block code %}
+	
+	<section id="make-post"  class="position-absolute top-50 start-50 translate-middle">
+
+		<div class="card">
+				<div class="card-header">What do you think...</div>
+				<form>
+					<div class="card-body">
+						<textarea class="form-control" rows="5" id="comment" name="tweet"></textarea>
+					</div>
+					<div class="card-footer"><i class="fa-regular fa-images"></i>
+						<button type="button" class="btn btn-secondary" 
+								hx-post="/api/tweet"
+								hx-trigger="click"
+								hx-target="#posts"
+								hx-swap="afterbegin">tweet
+						</button>	
+						<button type="button" class="btn btn-secondary" >upload file</button>	
+					</div>
+				</form>
+		</div>
+	</section>
 
     <div id="main" class="col-sm-12 col-lg-6">
 
-	<section id="search">
+		<section id="search" class="">
 
-		<div class="coustom-container container p-5 my-5">
-			<div class="content-header">
-				<img src="/img/twitter.png" alt="twitter Logo" style="width:50px;" class="rounded-pill"/> 
-				<a id="tweet" >tweet</a>
-			</div>
-		</div>
-	</section>
-
-
-
-	<section id="make-post">
-
-		<div class="card">
-			<div class="card-header">What do you think...</div>
-			<form>
-				<div class="card-body">
-					<textarea class="form-control" rows="5" id="comment" name="tweet"></textarea>
+			<div class="coustom-container container bg-body-tertiary  p-5 my-5">
+				<div class="content-header">
+					<img src="/img/twitter.png" alt="twitter Logo" style="width:50px;" class="rounded-pill"/> 
+					<a id="tweet" >tweet</a>
 				</div>
-				<div class="card-footer"><i class="fa-regular fa-images"></i>
-					<button type="button" class="btn btn-secondary" 
-							hx-post="/api/tweet"
-							hx-trigger="click"
-							hx-target="#posts"
-							hx-swap="outerHTML">tweet
-					</button>	
-					<button type="button" class="btn btn-secondary" >upload file</button>	
-				</div>
-			</form>
-		</div>
-	</section>
-
-	<section id="posts">
- 
-		{% for tweet in tweets %} 
-		{{ tweet.id}}
-			{% if tweet.oid != null %}
-                <div class="card col-lg-12">
-
-			 	<div class="d-flex align-items-center mb-3">
-                        <a href="profile/?profile={{ tweet.ouser_name }}"  hx-boost="true"><img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" width="50" class="rounded-circle" /></a>
-                        <div class="flex-fill ps-2" >
-                            <div class="fw-bold"><a href="#" class="text-decoration-none">{{ tweet.ouser_name }} </a></div>
-                            <div class="small text-body text-opacity-50">{{ tweet.ocreateDate }}</div>
-                        </div>
-                    </div>
-
-			{% include 'templates/tweet.html' %}
 			</div>
-			{% else %}
-			{% include 'templates/tweet.html' %}
-			{% endif %}
-		{% endfor %}
-	</section>
+		</section>
+
+
+
+
+		<section id="posts">
 	
-	{% include "templates/popup.html" %}
+			{% for tweet in tweets %} 
+			{{ tweet.id}}
+				{% if tweet.retweetId != null %}
+					<div class="card col-lg-12">
+						<div class="d-flex align-items-center mb-3">
+								<a href="profile/?profile={{ tweet.reuserName }}"  hx-boost="true"><img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" width="50" class="rounded-circle" /></a>
+								<div class="flex-fill ps-2" >
+									<div class="fw-bold"><a href="#" class="text-decoration-none">{{ tweet.reuserName }} </a> <h6> retweeted </h6></div>
+									<div class="small text-body text-opacity-50">{{ tweet.recreateDate }}</div>
+								</div>
+							</div>
+						{% include 'templates/tweet.peb' %}
+						<div class="row text-center fw-bold">
+							<div class="col">
+
+								<h6  class="text-body text-opacity-50 text-decoration-none d-block p-2"
+										hx-trigger="click"
+										hx-swap="innerHTML"
+										hx-target="find span"
+										hx-post="/api/tweet/like"
+										hx-vals='{"tweet-id": {{tweet.tweetId}} }'
+										>
+										<i class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> 
+										<span >{{tweet.relikesCount}}</span> Likes 
+								</h6>
+							</div>
+			
+						
+						</div>
+						<hr class="mb-3 mt-1 opacity-1" />
+		
+					</div>
+				
+				{% else %}
+					{% include 'templates/tweet.peb' %}
+				{% endif %}
+			{% endfor %}
+		</section>
+		
+		{% include "templates/popup.html" %}
 	</div>
 	<script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -80,7 +99,16 @@
 
 		            $('body').css('background-color', 'rgba(0, 0, 0, 0.5)');
 		 		}
+			if (evt.detail.target.id == 'posts') {
+
+				var popElement = document.getElementById('make-post');
+				popElement.style.display = 'none';
+            $(".overlay").hide();
+
+			}
 			});
+
+			
 		});
 </script>
 	<script src="/js/main.js"></script>

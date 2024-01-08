@@ -58,8 +58,8 @@ public interface TweetDAO {
         @RegisterRowMapper(TweetDTOMapper.class)
         List<TweetDTO> getTweets(@Bind("id") Integer id);
 
-        @SqlQuery("SELECT r.id, u.user_name, t.tweet, r.create_date, l.user_id as users, COUNT(l.like_id) as count" +
-                        "t.id as oid, uo.user_name as ouser_name, t.create_date as ocreateDate, ol.user_id as ousers, COUNT(ol.like_id) as ocount"
+        @SqlQuery("SELECT r.id, u.user_name, t.tweet, r.create_date, l.user_id as users, COUNT(l.like_id) as count, " +
+                        "t.id as oid, uo.user_name as ouser_name, t.create_date as ocreateDate, ol.user_id as ousers, COUNT(ol.like_id) as ocount "
                         +
                         "FROM Retweet r " +
                         "JOIN Tweet t ON r.tweet_id = t.id " +
@@ -68,12 +68,13 @@ public interface TweetDAO {
                         "LEFT JOIN \"like\" l ON l.tweet_id = r.id " +
                         "LEFT JOIN \"like\" ol ON ol.tweet_id = t.id " +
                         "WHERE (:id != 0 AND u.id = :id) OR (:id = 0) " +
-                        "GROUP BY r.id, u.user_name, t.tweet, r.create_date, l.user_id " +
-                        "ORDER BY r.create_date DESC ")
+                        "GROUP BY r.id, u.user_name, t.tweet, r.create_date, l.user_id, t.id, uo.user_name, t.create_date, ol.user_id "
+                        +
+                        "ORDER BY r.create_date DESC")
         @RegisterRowMapper(RetweetDTOMapper.class)
         List<RetweetDTO> getRetweets(@Bind("id") Integer id);
 
-        @SqlQuery("SELECT t.id, u.user_name, t.tweet, t.create_date " +
+        @SqlQuery("SELECT t.id, u.user_name, t.tweet, t.create_date, null as users, 0 as count " +
                         "FROM Tweet t JOIN \"User\" u ON u.id = t.user_id WHERE t.id = :tweetId")
         @RegisterRowMapper(TweetDTOMapper.class)
         TweetDTO findById(@Bind("tweetId") Integer tweetId);

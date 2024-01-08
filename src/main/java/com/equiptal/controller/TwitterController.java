@@ -35,7 +35,7 @@ public class TwitterController {
         List<TweetBase> combinedList = new ArrayList<>();
         combinedList.addAll(tweets);
         combinedList.addAll(retweets);
-
+        System.err.println(tweets);
         Comparator<TweetBase> createDateComparator = Comparator.comparing(TweetBase::getCreateDate).reversed();
 
         Collections.sort(combinedList, createDateComparator);

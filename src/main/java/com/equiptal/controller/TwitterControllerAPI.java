@@ -34,7 +34,8 @@ public class TwitterControllerAPI {
         // Integer tweetId = Integer.parseInt(retweet);
         // String tweetUserName = tweetService.getTweetOwner(tweetId);
         System.err.print(t);
-        model.put("tweets", t);
+        model.put("tweet", t);
+        ctx.render("templates/tweet.peb", model);
         ctx.status(201);
     };
 
