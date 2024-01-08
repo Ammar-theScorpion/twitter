@@ -1,0 +1,38 @@
+#pop {
+    display: none;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    z-index: 2000;
+ 
+    font-weight: bold !important;
+    font-size: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 2px 5px #00000096;
+    position: absolute;
+    left: 50%;
+    height: 80vh;
+    width: 80%;
+    transform: translate(-50%, -10%);
+
+    color: #172b4d;
+    & .head {
+        position: relative;
+        left: 26px;
+        top: 16px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    & .exit{
+        position: relative;
+        width: 35px;
+        height: 35px;
+        right: 46px;
+        top: -10px;
+        cursor: pointer;
+    }
+ 
+    
+}

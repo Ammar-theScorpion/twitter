@@ -1,0 +1,25 @@
+{% extends 'templates/main.html' %}
+{% block content %}
+
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="/img/twitter.png" alt="twitter Logo" style="width:40px;" class="rounded-pill"> 
+        </a>
+        <form class="d-flex">
+            <input class="form-control me-2" type="text" placeholder="Search">
+            <button class="btn btn-primary" id="nav-search" type="button">Search</button>
+        </form>
+        <div>
+
+          <a class="navbar-brand" href="#">
+            <img src="/img/user.png" alt="me Logo" style="width:40px;" class="rounded-pill"> 
+          </a>
+          <a href="/logout" >logout</a>
+        </div>
+        </div>
+  </nav>
+  {% endblock content %}
+
+  {% block code %}
+  {% endblock code %}

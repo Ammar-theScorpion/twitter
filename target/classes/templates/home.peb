@@ -1,0 +1,88 @@
+{% extends 'templates/nav.html' %}
+
+{% block code %}
+
+    <div id="main" class="col-sm-12 col-lg-6">
+
+	<section id="search">
+
+		<div class="coustom-container container p-5 my-5">
+			<div class="content-header">
+				<img src="/img/twitter.png" alt="twitter Logo" style="width:50px;" class="rounded-pill"/> 
+				<a id="tweet" >tweet</a>
+			</div>
+		</div>
+	</section>
+
+
+
+	<section id="make-post">
+
+		<div class="card">
+			<div class="card-header">What do you think...</div>
+			<form>
+				<div class="card-body">
+					<textarea class="form-control" rows="5" id="comment" name="tweet"></textarea>
+				</div>
+				<div class="card-footer"><i class="fa-regular fa-images"></i>
+					<button type="button" class="btn btn-secondary" 
+							hx-post="/api/tweet"
+							hx-trigger="click"
+							hx-target="#posts"
+							hx-swap="outerHTML">tweet
+					</button>	
+					<button type="button" class="btn btn-secondary" >upload file</button>	
+				</div>
+			</form>
+		</div>
+	</section>
+
+	<section id="posts">
+ 
+		{% for tweet in tweets %} 
+		{{ tweet.id}}
+			{% if tweet.oid != null %}
+                <div class="card col-lg-12">
+
+			 	<div class="d-flex align-items-center mb-3">
+                        <a href="profile/?profile={{ tweet.ouser_name }}"  hx-boost="true"><img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" width="50" class="rounded-circle" /></a>
+                        <div class="flex-fill ps-2" >
+                            <div class="fw-bold"><a href="#" class="text-decoration-none">{{ tweet.ouser_name }} </a></div>
+                            <div class="small text-body text-opacity-50">{{ tweet.ocreateDate }}</div>
+                        </div>
+                    </div>
+
+			{% include 'templates/tweet.html' %}
+			</div>
+			{% else %}
+			{% include 'templates/tweet.html' %}
+			{% endif %}
+		{% endfor %}
+	</section>
+	
+	{% include "templates/popup.html" %}
+	</div>
+	<script>
+    document.addEventListener('DOMContentLoaded', function () {
+		document.addEventListener('htmx:afterRequest', function(evt) {
+			console.log(evt.detail.target.id);
+			if (evt.detail.target.id == 'pop') {
+					var popElement = document.getElementById('pop');
+					popElement.style.display = 'flex';
+
+					// Calculate the top position dynamically based on the scroll position
+					let scrollY = window.scrollY || window.pageYOffset;
+					let screenHeight = window.innerHeight || document.documentElement.clientHeight;
+					let popupHeight = popElement.clientHeight;
+
+					let topPosition = Math.max(0, (screenHeight - popupHeight) / 2 + scrollY);
+					popElement.style.top = topPosition + 'px';
+
+		            $('body').css('background-color', 'rgba(0, 0, 0, 0.5)');
+		 		}
+			});
+		});
+</script>
+	<script src="/js/main.js"></script>
+{% endblock code %}
+

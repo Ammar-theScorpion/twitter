@@ -1,0 +1,16 @@
+.alert {
+    position: absolute;
+    width: 40%;
+
+}
+
+.left-middle {
+    left: -40%;
+    transform: translate(170%);
+    transition: 3.5s ease;
+
+}
+.middle-right {
+    transform: translate(400%);
+    transition: 3.5s ease;
+}

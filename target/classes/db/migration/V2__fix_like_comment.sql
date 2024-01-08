@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS "like" (
+    like_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES "User"(id) ON DELETE CASCADE,
+    tweet_id INT REFERENCES Tweet(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS comment (
+    comment_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES "User"(id) ON DELETE CASCADE,
+    tweet_id INT REFERENCES Tweet(id) ON DELETE CASCADE,
+    tweet TEXT NOT NULL,
+    create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

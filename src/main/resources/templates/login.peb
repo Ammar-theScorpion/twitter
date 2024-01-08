@@ -1,0 +1,32 @@
+{% extends 'templates/main.html' %}
+    {% block title %}
+        <title>login</title>
+    {% endblock title %}
+
+    {% block code %}
+      <link rel="stylesheet" href="/css/auth.css">
+    <h3 id="error"></h3>
+
+    <form >
+        <img class="logo mb-4 text-center" src="/img/twitter.png" alt="twitter" width="72" height="72">
+        <h1 class="h3 mb-3 fw-normal text-center">Log in</h1>
+
+        <div class="form-floating">
+            <input type="text" value="" class="form-control" id="floatingInput" name="userName">
+            <label for="floatingInput">User Name</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" value="" class="form-control" id="floatingPassword" name="pass">
+            <label for="floatingPassword">Password</label>
+        </div>
+
+        <button class="w-100 btn btn-lg btn-primary"
+                hx-trigger="click"  
+                hx-post="/api/login"
+                hx-swap="innerHTML"
+                hx-target="body"
+                hx-push-url="true"
+                hx-target-2xx="#error">Log in</button>
+    </form>
+    <a href="/signup">Don't have an account?</a>
+    {% endblock code %}
