@@ -1,14 +1,9 @@
 <link rel="stylesheet" href="/css/popup.css"/>
 <section id="pop">
+    {% for comment in comments %}
     <div id="panel">
-        <div class="head">
-            <div class="exit">
-                <i class="fa-solid fa-xmark"></i>
-            </div>
-        </div>
 
-        {% for comment in comments %}
-        <div class="d-flex align-items-center">
+        <div   style="padding-top: 100px;">
             <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" width="35" class="rounded-circle" />
             <div class="flex-fill ps-2">
                 <div class="position-relative d-flex align-items-center">
@@ -17,16 +12,11 @@
                             hx-swap="none">
                         <input type="hidden" name="tweet-id" value="{{tweet.tweetId}}">
                     </form>
-                    <div class="position-absolute end-0 text-center">
-                        <a href="#" class="text-body text-opacity-50 me-2"><i class="fa fa-smile"></i></a>
-                        <a href="#" class="text-body text-opacity-50 me-2"><i class="fa fa-camera"></i></a>
-                        <a href="#" class="text-body text-opacity-50 me-2"><i class="fa fa-video"></i></a>
-                        <a href="#" class="text-body text-opacity-50 me-3"><i class="fa fa-paw"></i></a>
-                    </div>
+                   
                 </div>
             </div>
         </div>
-        {% endfor %}
-
+        
     </div>
+    {% endfor %}
 </section>

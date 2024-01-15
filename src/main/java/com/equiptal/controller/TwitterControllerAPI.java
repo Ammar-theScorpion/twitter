@@ -33,7 +33,6 @@ public class TwitterControllerAPI {
         // retweet
         // Integer tweetId = Integer.parseInt(retweet);
         // String tweetUserName = tweetService.getTweetOwner(tweetId);
-        System.err.print(t);
         model.put("tweet", t);
         ctx.render("templates/tweet.peb", model);
         ctx.status(201);
@@ -53,12 +52,20 @@ public class TwitterControllerAPI {
         String userName = ctx.sessionAttribute("currentUser");
         Integer userId = userService.findIdByName(userName);
 
-        tweetService.comment(tweetId, userId, comment);
+        Integer commentId = tweetService.comment(tweetId, userId, comment);
+        Map<String, Object> model = new HashMap<>();
+        model.put("tweets", tweetService.getComment(commentId));
+        model.put("onlyComment", true);
+
+        ctx.render("templates/comments.peb", model);
     };
 
     public Handler getTweetComments = ctx -> {
         Integer tweetId = Integer.parseInt(ctx.formParam("tweet-id"));
         Map<String, Object> model = new HashMap<>();
+        model.put("tweet", tweetService.getTweet(tweetId));
+        model.put("onComment", true);
+
         model.put("tweets", tweetService.getComments(tweetId));
         ctx.render("templates/comments.peb", model);
     };
@@ -70,8 +77,11 @@ public class TwitterControllerAPI {
 
         RetweetDTO t = tweetService.insertRetweet(tweetId, userId); // old tweet and current user
         Map<String, Object> model = new HashMap<>();
-
-        model.put("tweets", t);
+        model.put("tweet", t);
+        System.err.println(tweetId);
+        System.err.println(userId);
+        System.err.println(t);
+        ctx.render("templates/retweet.peb", model);
         ctx.status(201);
     };
 

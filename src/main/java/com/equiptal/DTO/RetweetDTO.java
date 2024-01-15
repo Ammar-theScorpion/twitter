@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class RetweetDTO implements TweetBase {
     private Integer retweetId;
     private String reuserName;
-    private String retweet;
+    private String tweet;
     private Date recreateDate;
     private Array reusers;
     private Integer relikesCount;

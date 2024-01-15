@@ -30,18 +30,27 @@ public class TwitterController {
 
     public Handler homePage = ctx -> {
         Map<String, Object> model = new HashMap<>();
-        List<TweetDTO> tweets = tweetService.getTweets(0);
-        List<RetweetDTO> retweets = tweetService.getRetweets(0);
+        model.put("me", ctx.sessionAttribute("currentUser"));
+        model.put("page", 1);
+        ctx.render("templates/home.peb", model);
+    };
+
+    public Handler getTweets = ctx -> {
+
+        Integer currentPage = Integer.parseInt(ctx.queryParam("page"));
+        List<TweetDTO> tweets = tweetService.getTweets(0, currentPage);
+        List<RetweetDTO> retweets = tweetService.getRetweets(0, currentPage);
         List<TweetBase> combinedList = new ArrayList<>();
         combinedList.addAll(tweets);
         combinedList.addAll(retweets);
-        System.err.println(tweets);
         Comparator<TweetBase> createDateComparator = Comparator.comparing(TweetBase::getCreateDate).reversed();
-
+        System.err.print(tweets.size());
         Collections.sort(combinedList, createDateComparator);
 
+        Map<String, Object> model = new HashMap<>();
         model.put("tweets", combinedList);
-        ctx.render("templates/home.peb", model);
+        model.put("page", currentPage + 1);
+        ctx.render("templates/loader.peb", model);
     };
 
     public Handler profile = ctx -> {
@@ -52,6 +61,7 @@ public class TwitterController {
 
         Map<String, Object> model = new HashMap<>();
         model.put("user", userInfo);
+        model.put("page", 1);
         model.put("tweets", tweetService.getTweets(userId));
 
         ctx.render("templates/profile.peb", model);

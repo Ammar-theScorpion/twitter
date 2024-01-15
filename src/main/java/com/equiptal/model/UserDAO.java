@@ -1,5 +1,7 @@
 package com.equiptal.model;
 
+import java.util.List;
+
 import org.jdbi.v3.sqlobject.config.RegisterRowMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
@@ -16,9 +18,12 @@ public interface UserDAO {
     @RegisterRowMapper(UserDTOMapper.class)
     UserDTO getUserProfile(@Bind("userId") Integer userId);
 
-    @SqlQuery("SELECT user_name FROM \"User\" u WHERE u.user_name=:userName")
-    String findByUserName(@Bind("userName") String userName);
+    @SqlQuery("SELECT user_name FROM \"User\" u WHERE u.user_name=:userName AND u.user_pass=:pass")
+    String findByUserName(@Bind("userName") String userName, @Bind("pass") String pass);
 
     @SqlQuery("SELECT id FROM \"User\" u WHERE u.user_name=:userName")
     Integer findIdByName(@Bind("userName") String userName);
+
+    @SqlQuery("SELECT user_name FROM \"User\" u WHERE u.user_name LIKE CONCAT('%', :userName, '%')")
+    List<String> findMatchNames(@Bind("userName") String userName);
 }

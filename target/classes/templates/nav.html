@@ -1,26 +1,120 @@
-{% extends 'templates/main.html' %}
-{% block content %}
 
   <nav class="navbar navbar-expand-sm navbar bg-body-tertiary fixed-top" style="border-bottom: 1px solid gray; box-shadow: 2px 0 0 green;">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a id="logo" class="navbar-brand" href="#">
           <img src="/img/twitter.png" alt="twitter Logo" style="width:40px;" class="rounded-pill">
           twitter 
         </a>
-        <form class="d-flex">
-            <input class="form-control me-2" type="text" placeholder="Search">
-            <button class="btn btn-primary" id="nav-search" type="button">Search</button>
+        <form class="d-flex" style="flex-grow: 0.4;">
+
+            <i id="ssearch" class="fa-solid fa-magnifying-glass" onclick="d(this)"
+            hx-trigger="keyup"
+            hx-post="/api/tweet/search"
+            hx-target="#pop-card-text"
+            hx-swap="innerHTML"></i>
+
+            <input id="fsearch" class="form-control me-2" onclick="d(this)" name="name" type="text" placeholder="Search"
+              hx-trigger="keyup"
+              hx-post="/api/tweet/search"
+              hx-target="#pop-card-text"
+              hx-swap="innerHTML">
         </form>
+        <div id="results" style="display: none; width: 210px;">
+        </div>
         <div>
 
-          <a class="navbar-brand" href="#">
+          <a class="navbar-brand" href="profile/?profile={{me}}" >
             <img src="/img/user.png" alt="me Logo" style="width:40px;" class="rounded-pill"> 
           </a>
           <a href="/logout" >logout</a>
         </div>
         </div>
   </nav>
-  {% endblock content %}
 
-  {% block code %}
-  {% endblock code %}
+  <div id="pop-card" class="card">
+    <div class="container mt-4">
+
+        <div class="row justify-content-center">
+            <div class="col-sm-12 " id="pop-card-text">
+              start typing
+            </div>
+        </div>
+    </div>
+</div>
+  <div id="overlay" onclick="overlay(this)"></div>
+  <img  id="spinner" class="htmx-indicator-load" src="/img/twitter.png"/>
+
+<script>
+    function d(e){
+
+        let search = document.getElementById('fsearch');
+        let display = window.getComputedStyle(search).display;
+        if(display == 'none'){
+          search.style.display='block';
+          document.getElementById('logo').style.display = 'none';
+          document.getElementById('ssearch').style.display = 'none';
+
+
+        }
+        document.getElementById('pop-card').style.display = 'block';
+        document.getElementById('pop-card').style.position = 'fixed';
+        
+        document.getElementById('pop-card').style.top = search.clientTop+ search.clientHeight+21+ 'px';
+        document.getElementById('pop-card').style.left = search.offsetLeft + 'px';
+        document.getElementById('pop-card').style.width = search.offsetWidth + 'px';
+
+        document.getElementById('overlay').style.display = 'block';
+    };
+
+    function showIndicator() {
+			console.log('ivb')
+    		document.getElementById('spinner').style.display = 'block';
+		 }
+    function overlay() {
+      let screenWidth = window.innerWidth;
+      if(screenWidth<=740){
+        document.getElementById('logo').style.display = 'inline';
+        document.getElementById('ssearch').style.display = 'inline';
+        document.getElementById('fsearch').style.display = 'none';
+
+      }
+      document.body.style.overflowY = 'scroll';
+
+        document.getElementById('pop-card').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none'
+        document.getElementById('pop').style.display = 'none'
+
+        document.getElementById('make-post').style.display = 'none'
+    }
+
+    document.addEventListener('htmx:afterRequest', function(evt) {
+			console.log(evt.detail.target.id);
+			if (evt.detail.target.id == 'pop') {
+					popup();
+		 		}
+			if (evt.detail.target.id == 'posts') {
+				console.log(3)
+				var popElement = document.getElementById('make-post');
+				popElement.style.display = 'none';
+            	$("#overlay").hide();
+      			document.body.style.overflowY = 'scroll';
+
+			}
+			});
+
+
+    function popup() {
+					var popElement = document.getElementById('pop');
+					popElement.style.display = 'flex';
+
+					let scrollY = window.scrollY || window.pageYOffset;
+					let screenHeight = window.innerHeight || document.documentElement.clientHeight;
+					let popupHeight = popElement.clientHeight;
+
+					let topPosition = Math.max(0, (screenHeight - popupHeight) / 2 + scrollY);
+					popElement.style.top = topPosition + 'px';
+		            $("#overlay").show();
+			      document.body.style.overflowY = 'hidden';
+			}
+</script>
+

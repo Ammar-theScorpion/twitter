@@ -11,14 +11,15 @@ import org.eclipse.jetty.server.session.SessionHandler;
 
 import com.equiptal.service.UserService;
 
-import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class AuthImplementaion {
+    private UserService userService;
 
     @Inject
     public AuthImplementaion(UserService userService) {
@@ -43,50 +44,55 @@ public class AuthImplementaion {
         return fileSessionDataStore;
     }
 
-    public Handler renderLogin = ctx -> {
-        ctx.render("templates/login.peb");
-    };
+    public Handler handeLogin = ctx -> {
+        Map<String, Object> model = new HashMap<>();
+        model.put("auth_type", "Log In");
+        model.put("auth_url", "login");
 
-    public Handler renderSignup = ctx -> {
-        ctx.render("templates/signup.peb");
-    };
+        if (ctx.method() == HandlerType.POST) {
+            System.err.println(ctx.method());
+            String userName = ctx.formParam("userName");
+            String password = ctx.formParam("pass");
+            String result = userService.login(userName, password);
+            if (result.equals("404")) {
 
-    public void handeLogin(Context ctx) {
-        String userName = ctx.formParam("userName");
-        String password = ctx.formParam("pass");
-        String result = userService.login(userName, password);
-        if (result.equals("404")) {
-            // want to fix this
-            ctx.status(404);
-            ctx.result("Invalid username or password");
-        } else {
-            ctx.sessionAttribute("currentUser", userName);
+                model.put("error", "user name or password is worng");
+                model.put("name", userName);
+                model.put("pass", password);
 
-            ctx.header("HX-Redirect", "/");
-            ctx.redirect("/", HttpStatus.SEE_OTHER);
+            } else {
+                ctx.sessionAttribute("currentUser", userName);
+                ctx.header("HX-Redirect", "/");
+                ctx.redirect("/", HttpStatus.SEE_OTHER);
+            }
         }
+        ctx.render("templates/auth/login.peb", model);
     };
 
-    public void handeSignup(Context ctx) {
-        String userName = ctx.formParam("userName");
-        String password = ctx.formParam("pass");
-        String result = userService.createUser(userName, password);
-        if (result.equals("201")) {
-            // want to fix this
-            ctx.sessionAttribute("currentUser", userName);
-            ctx.header("HX-Redirect", "/");
-            ctx.redirect("/", HttpStatus.SEE_OTHER);
-        } else {
-            ctx.status(HttpStatus.SEE_OTHER);
-            Map<String, Object> model = new HashMap<>();
-            model.put("error", result);
-            ctx.render("templates/signup.peb", model);
+    public Handler handeSignup = ctx -> {
+        Map<String, Object> model = new HashMap<>();
+        model.put("auth_type", "Sign Up");
+        model.put("auth_url", "signup");
+        if (ctx.method() == HandlerType.POST) {
+            String userName = ctx.formParam("userName");
+            String password = ctx.formParam("pass");
+            String result = userService.createUser(userName, password);
+
+            if (result.equals("201")) {
+                // want to fix this
+                ctx.sessionAttribute("currentUser", userName);
+                ctx.header("HX-Redirect", "/");
+                ctx.redirect("/", HttpStatus.SEE_OTHER);
+            } else {
+                ctx.status(HttpStatus.SEE_OTHER);
+                model.put("error", result);
+                model.put("name", userName);
+                model.put("pass", password);
+
+            }
         }
-    };
 
-    public Handler signup = ctx -> {
-        String userName = ctx.formParam("userName");
-        String pass = ctx.formParam("pass");
+        ctx.render("templates/auth/signup.peb", model);
     };
 
     public Handler logout = ctx -> {
@@ -101,5 +107,4 @@ public class AuthImplementaion {
         }
     };
 
-    private UserService userService;
 }

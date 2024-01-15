@@ -1,0 +1,14 @@
+{% extends 'templates/main.html' %}
+    {% block title %}
+        <title>signup</title>
+    {% endblock title %}
+
+    {% block code %}
+      <link rel="stylesheet" href="/css/auth.css">
+       {% include "templates/auth/authForm.html" %} 
+
+    <a href="/login">Have an account?</a>
+
+    {% endblock code %}
+
+

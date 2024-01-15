@@ -1,0 +1,13 @@
+
+<div class="card" id="search-names" style="">
+    <div class="card-body">
+        {% if simNames is not empty %}
+            {% for name in simNames %}
+                <a href="profile/?profile={{name}}" >{{name}}</a>
+                <br>
+            {% endfor %}
+        {% else %}
+            no such user
+        {% endif %}
+    </div>
+</div>

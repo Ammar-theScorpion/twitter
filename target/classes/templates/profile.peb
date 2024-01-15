@@ -1,15 +1,17 @@
 {% extends 'templates/main.html' %}
+  {% include "templates/nav.html" %}
+
     {% block title %}
         <title>profile</title>
     {% endblock title %}
 
     {% block code %}
+		{% include "templates/popup.html" %}
 
-<div class="row py-5 px-4">
+<div class="row py-5 px-4 p-5 my-5">
     <div class="col-xl-4 col-md-6 col-sm-10 mx-auto">
 
-        <!-- Profile widget -->
-        <div class="bg-white shadow rounded overflow-hidden">
+         <div class="bg-white shadow rounded overflow-hidden">
             <div class="px-4 pt-0 pb-4 bg-dark">
                 <div class="media align-items-end profile-header">
                     <div class="profile mr-3"><img src="/img/user.png" alt="..." width="130" class="rounded mb-2 img-thumbnail">
@@ -23,7 +25,7 @@
             <div class="bg-light p-4 d-flex justify-content-end text-center">
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item">
-                        <h5 class="font-weight-bold mb-0 d-block">{{user.likesCount}}</h5><small class="text-muted"> <i class="far fa-thumbs-up"></i>Likes</small>
+                        <h5 class="font-weight-bold mb-0 d-block">{{ user.likesCount is defined ? user.likesCount : 0 }}</h5><small class="text-muted"> <i class="far fa-thumbs-up"></i>Likes</small>
                     </li>
                     <li class="list-inline-item">
                         <h5 class="font-weight-bold mb-0 d-block">{{tweets|length}}</h5><small class="text-muted"> <i class="fa fa-user-circle-o mr-1"></i>Posts</small>

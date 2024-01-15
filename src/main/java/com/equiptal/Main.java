@@ -20,7 +20,7 @@ public class Main {
     public Main() {
         Injector injector = Guice.createInjector(new AppModule());
         TweetService tweetService = injector.getInstance(TweetService.class);
-        UserService userService = injector.getInstance(UserService.class);
+        userService = injector.getInstance(UserService.class);
         authImplementaion = injector.getInstance(AuthImplementaion.class);
         twitterControllerAPI = injector.getInstance(TwitterControllerAPI.class);
         twitterController = injector.getInstance(TwitterController.class);
@@ -35,18 +35,20 @@ public class Main {
                     post("/comment", twitterControllerAPI.comment);
                     post("/getComments", twitterControllerAPI.getTweetComments);
                     post("/retweet", twitterControllerAPI.retweet);
+                    post("/search", userService.search);
+                    get("/getTweets", twitterController.getTweets);
                 });
 
-                post("login", authImplementaion::handeLogin);
-                post("signup", authImplementaion::handeSignup);
             });
 
             // VIEW //
             before("/", authImplementaion.ensureLogin);
             get("/", twitterController.homePage);
             get("/logout", authImplementaion.logout);
-            get("/login", authImplementaion.renderLogin);
-            get("/signup", authImplementaion.renderSignup);
+            get("/login", authImplementaion.handeLogin);
+            post("login", authImplementaion.handeLogin);
+            get("/signup", authImplementaion.handeSignup);
+            post("/signup", authImplementaion.handeSignup);
             get("/profile", twitterController.profile);
 
         });
@@ -59,7 +61,7 @@ public class Main {
 
             config.staticFiles.add("/public"); // client files/ static, img, css...
             config.jetty.sessionHandler(() -> AuthImplementaion.fileSessionHandler());
-        }).start(8084);
+        }).start(8080);
 
         new Main().configureRoutes(app);
 
@@ -68,5 +70,6 @@ public class Main {
     private TwitterControllerAPI twitterControllerAPI;
     private AuthImplementaion authImplementaion;
     private TwitterController twitterController;
+    private UserService userService;
 
 }

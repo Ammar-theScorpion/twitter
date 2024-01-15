@@ -17,6 +17,7 @@ public class TweetService {
 
     public RetweetDTO insertRetweet(Integer tweetId, Integer userId) {
         Integer id = tweetDAO.insertRetweet(tweetId, userId);
+        System.err.println(id);
         return tweetDAO.findByIdRT(id);
     }
 
@@ -30,8 +31,12 @@ public class TweetService {
         return tweetDAO.likesCount(tweetId);
     }
 
-    public void comment(Integer tweetId, Integer userId, String tweet) {
-        tweetDAO.comment(tweetId, userId, tweet);
+    public Integer comment(Integer tweetId, Integer userId, String tweet) {
+        return tweetDAO.comment(tweetId, userId, tweet);
+    }
+
+    public List<CommentDTO> getComment(Integer tweetId) {
+        return tweetDAO.getComment(tweetId);
     }
 
     public List<CommentDTO> getComments(Integer tweetId) {
@@ -39,12 +44,29 @@ public class TweetService {
         return tweetDAO.getComments(tweetId);
     }
 
-    public List<TweetDTO> getTweets(Integer id) {
-        return tweetDAO.getTweets(id);
+    public TweetDTO getTweet(Integer id) {
+        return tweetDAO.getTweet(id);
     }
 
-    public List<RetweetDTO> getRetweets(Integer id) {
-        return tweetDAO.getRetweets(id);
+    public List<TweetDTO> getTweets(Integer id, Integer limit) {
+        System.err.println("--------------------------------");
+        System.err.println(5);
+        System.err.println(5 * (limit - 1));
+        System.err.println("--------------------------------");
+        List<TweetDTO> tw = tweetDAO.getTweets(id, 5, 5 * (limit - 1));
+        System.err.println(tw.size());
+        return tw;
+    }
+
+    public List<TweetDTO> getTweets(Integer id) {
+        int defaultLimit = 5;
+        int defaultOffset = 0;
+
+        return tweetDAO.getTweets(id, defaultLimit, defaultOffset);
+    }
+
+    public List<RetweetDTO> getRetweets(Integer id, Integer limit) {
+        return tweetDAO.getRetweets(id, 5, 5 * (limit - 1));
     }
 
     public String getTweetOwner(Integer tweetId) {

@@ -5,10 +5,11 @@ $(document).ready(function(){
         if(display === 'none'){
             console.log(2)
 
-            $(".overlay").show();
+            $("#overlay").show();
             $("#make-post").show();
+            document.body.style.overflow = 'hidden';
         }else{
-            $(".overlay").hide();
+            $("#overlay").hide();
             $("#make-post").hide();
         }
     });

@@ -1,0 +1,12 @@
+{% for tweet in tweets %} 
+    {{ tweet.id }}
+    {% if tweet.retweetId != null %}
+        {% include 'templates/retweet.peb' %}
+    {% else %}
+        {% include 'templates/tweet.peb' %}
+    {% endif %}
+{% endfor %}
+
+<div hx-get="/api/tweet/getTweets?page={{page}}" hx-target="this" hx-swap="outerHTML" hx-trigger="revealed">
+    <img id="spinner" class="htmx-indicator" src="/img/bars.svg"/>
+</div>
