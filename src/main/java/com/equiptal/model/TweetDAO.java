@@ -8,10 +8,8 @@ import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
-import com.equiptal.DTO.CommentDTO;
 import com.equiptal.DTO.RetweetDTO;
 import com.equiptal.DTO.TweetDTO;
-import com.equiptal.otherServices.Mapper.CommentDTOMapper;
 import com.equiptal.otherServices.Mapper.RetweetDTOMapper;
 import com.equiptal.otherServices.Mapper.TweetDTOMapper;
 
@@ -25,37 +23,6 @@ public interface TweetDAO {
         @GetGeneratedKeys
         Integer insertRetweet(@Bind("tweetId") Integer tweetId, @Bind("retweetUserId") Integer retweetUserId);
 
-        // LIKES
-        @SqlUpdate("INSERT INTO \"like\"(user_id, tweet_id) VALUES ( :userId, :tweetId) ")
-        void giveLike(@Bind("tweetId") Integer tweetId, @Bind("userId") Integer userId);
-
-        @SqlUpdate("DELETE FROM \"like\" WHERE user_id = :userId AND tweet_id=:tweetId ")
-        void deleteLike(@Bind("tweetId") Integer tweetId, @Bind("userId") Integer userId);
-
-        @SqlQuery("SELECT COUNT(l.like_id) FROM \"like\" l WHERE tweet_id=:tweetId")
-        Integer likesCount(@Bind("tweetId") Integer tweetId);
-        // LIKES
-
-        @SqlUpdate("INSERT INTO comment(user_id, tweet_id, tweet) VALUES ( :userId, :tweetId, :tweet) ")
-        @GetGeneratedKeys
-        Integer comment(@Bind("tweetId") Integer tweetId, @Bind("userId") Integer userId,
-                        @Bind("tweet") String tweet);
-
-        @SqlQuery("SELECT c.tweet, c.create_date, u.user_name FROM comment c " +
-                        "JOIN \"User\" u ON u.id = c.user_id " +
-                        "WHERE c.comment_id = :id ")
-        @RegisterRowMapper(CommentDTOMapper.class)
-        List<CommentDTO> getComment(@Bind("id") Integer id);
-
-        @SqlQuery("SELECT c.tweet, c.create_date, u.user_name FROM comment c " +
-                        "JOIN \"User\" u ON u.id = c.user_id " +
-                        "WHERE c.tweet_id = :tweetId ")
-        @RegisterRowMapper(CommentDTOMapper.class)
-        List<CommentDTO> getComments(@Bind("tweetId") Integer tweetId);
-
-        @SqlQuery(" SELECT EXISTS (SELECT l.like_id FROM \"like\" l " +
-                        "WHERE l.user_id = :userId AND l.tweet_id = :tweetId ) ")
-        Boolean noLikeForThisTweet(@Bind("tweetId") Integer tweetId, @Bind("userId") Integer userId);
 
         @SqlQuery("SELECT t.id, u.user_name, t.tweet, t.create_date, l.user_id as users, COUNT(l.like_id) as count "
                         + "FROM Tweet t JOIN \"User\" u ON u.id = t.user_id LEFT JOIN \"like\" l ON l.tweet_id = t.id "

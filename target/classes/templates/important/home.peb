@@ -1,9 +1,9 @@
-{% extends 'templates/main.html' %}
+{% extends 'templates/important/main.html' %}
 
 {% block code %}
-  {% include "templates/nav.html" %}
+  {% include "templates/important/nav.html" %}
 
-		{% include "templates/popup.html" %}
+		{% include "templates/important/popup.html" %}
 
 
   <section id="make-post"  class="top-50 start-50 translate-middle">
@@ -40,7 +40,7 @@
 
 
 		<section id="posts">	
-			{% include "templates/loader.peb" %}
+			{% include "templates/lazy/loader.peb" %}
 
 		</section>
 		

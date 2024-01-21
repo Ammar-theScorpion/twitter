@@ -1,9 +1,9 @@
 {% for tweet in tweets %} 
     {{ tweet.id }}
     {% if tweet.retweetId != null %}
-        {% include 'templates/retweet.peb' %}
+        {% include 'templates/tweet/retweet.peb' %}
     {% else %}
-        {% include 'templates/tweet.peb' %}
+        {% include 'templates/tweet/tweet.peb' %}
     {% endif %}
 {% endfor %}
 

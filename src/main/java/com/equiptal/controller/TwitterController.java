@@ -10,9 +10,11 @@ import java.util.Map;
 import com.equiptal.DTO.RetweetDTO;
 import com.equiptal.DTO.TweetDTO;
 import com.equiptal.DTO.UserDTO;
+import com.equiptal.model.DBConnection;
+import com.equiptal.model.UserDAO;
 import com.equiptal.otherServices.Tweet.TweetBase;
-import com.equiptal.service.TweetService;
 import com.equiptal.service.UserService;
+import com.equiptal.service.tweet.TweetService;
 
 import io.javalin.http.Handler;
 import jakarta.inject.Inject;
@@ -21,6 +23,8 @@ public class TwitterController {
 
     private TweetService tweetService;
     private UserService userService;
+
+    private UserDAO userDAO = DBConnection.jdbi.onDemand(UserDAO.class);
 
     @Inject
     public TwitterController(TweetService tweetService, UserService userService) {
@@ -32,7 +36,7 @@ public class TwitterController {
         Map<String, Object> model = new HashMap<>();
         model.put("me", ctx.sessionAttribute("currentUser"));
         model.put("page", 1);
-        ctx.render("templates/home.peb", model);
+        ctx.render("templates/important/home.peb", model);
     };
 
     public Handler getTweets = ctx -> {
@@ -50,7 +54,7 @@ public class TwitterController {
         Map<String, Object> model = new HashMap<>();
         model.put("tweets", combinedList);
         model.put("page", currentPage + 1);
-        ctx.render("templates/loader.peb", model);
+        ctx.render("templates/lazy/loader.peb", model);
     };
 
     public Handler profile = ctx -> {
@@ -64,6 +68,14 @@ public class TwitterController {
         model.put("page", 1);
         model.put("tweets", tweetService.getTweets(userId));
 
-        ctx.render("templates/profile.peb", model);
+        ctx.render("templates/user/profile.peb", model);
+    };
+
+    public Handler search = ctx -> {
+        String someoneName = ctx.formParam("name");
+        Map<String, Object> model = new HashMap<>();
+        List<String> names = userDAO.findMatchNames(someoneName);
+        model.put("simNames", names);
+        ctx.render("templates/tweet/search.peb", model);
     };
 }

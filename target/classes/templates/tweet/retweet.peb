@@ -11,7 +11,7 @@
                                 <div class="small text-body text-opacity-50">{{ tweet.recreateDate }}</div>
                             </div>
             </div>
-            {% include 'templates/tweet.peb' %}
+            {% include 'templates/tweet/tweet.peb' %}
             <div class="row text-center fw-bold">
                 <div class="col">
 

@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="/css/popup.css"/>
+<section id="pop">
+    {% for comment in comments %}
+    <div id="panel">
+
+        <div   style="padding-top: 100px;">
+            <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" width="35" class="rounded-circle" />
+            <div class="flex-fill ps-2">
+                <div class="position-relative d-flex align-items-center">
+                    <form hx-post="/api/tweet/comment" >
+                        <input type="text" name="comment" disabled value="{{comment.tweet}}" class="form-control rounded-pill bg-white bg-opacity-15" style="padding-right: 120px;"
+                            hx-swap="none">
+                        <input type="hidden" name="tweet-id" value="{{tweet.tweetId}}">
+                    </form>
+                   
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    {% endfor %}
+</section>

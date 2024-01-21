@@ -1,12 +1,12 @@
-{% extends 'templates/main.html' %}
-  {% include "templates/nav.html" %}
+{% extends 'templates/important/main.html' %}
+  {% include "templates/important/nav.html" %}
 
     {% block title %}
         <title>profile</title>
     {% endblock title %}
 
     {% block code %}
-		{% include "templates/popup.html" %}
+		{% include "templates/important/popup.html" %}
 
 <div class="row py-5 px-4 p-5 my-5">
     <div class="col-xl-4 col-md-6 col-sm-10 mx-auto">
@@ -35,7 +35,7 @@
 
 
             {% for tweet in tweets %}
-			    {% include 'templates/tweet.peb' %}
+			    {% include 'templates/important/tweet.peb' %}
 		    {% endfor %}
         </div>
 

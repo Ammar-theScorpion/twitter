@@ -5,22 +5,29 @@ import java.util.Map;
 
 import com.equiptal.DTO.RetweetDTO;
 import com.equiptal.DTO.TweetDTO;
-import com.equiptal.service.TweetService;
 import com.equiptal.service.UserService;
+import com.equiptal.service.tweet.CommentService;
+import com.equiptal.service.tweet.LikeService;
+import com.equiptal.service.tweet.TweetService;
 
 import io.javalin.http.Handler;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class TwitterControllerAPI {
+public class TwitterControllerTweet {
     private TweetService tweetService;
     private UserService userService;
+    private LikeService likeService;
+    private CommentService commentService;
 
     @Inject
-    public TwitterControllerAPI(TweetService tweetService, UserService userService) {
+    public TwitterControllerTweet(TweetService tweetService, UserService userService, CommentService commentService,
+            LikeService likeService) {
         this.tweetService = tweetService;
         this.userService = userService;
+        this.likeService = likeService;
+        this.commentService = commentService;
     }
 
     public Handler tweet = ctx -> {
@@ -34,7 +41,7 @@ public class TwitterControllerAPI {
         // Integer tweetId = Integer.parseInt(retweet);
         // String tweetUserName = tweetService.getTweetOwner(tweetId);
         model.put("tweet", t);
-        ctx.render("templates/tweet.peb", model);
+        ctx.render("templates/tweet/tweet.peb", model);
         ctx.status(201);
     };
 
@@ -42,7 +49,7 @@ public class TwitterControllerAPI {
         Integer tweetId = Integer.parseInt(ctx.formParam("tweet-id"));
         String userName = ctx.sessionAttribute("currentUser");
         Integer userId = userService.findIdByName(userName);
-        Integer likesCount = tweetService.giveLike(tweetId, userId);
+        Integer likesCount = likeService.giveLike(tweetId, userId);
         ctx.result(likesCount + "");
     };
 
@@ -52,12 +59,12 @@ public class TwitterControllerAPI {
         String userName = ctx.sessionAttribute("currentUser");
         Integer userId = userService.findIdByName(userName);
 
-        Integer commentId = tweetService.comment(tweetId, userId, comment);
+        Integer commentId = commentService.comment(tweetId, userId, comment);
         Map<String, Object> model = new HashMap<>();
-        model.put("tweets", tweetService.getComment(commentId));
+        model.put("tweets", commentService.getComment(commentId));
         model.put("onlyComment", true);
 
-        ctx.render("templates/comments.peb", model);
+        ctx.render("templates/tweet/comments.peb", model);
     };
 
     public Handler getTweetComments = ctx -> {
@@ -66,8 +73,8 @@ public class TwitterControllerAPI {
         model.put("tweet", tweetService.getTweet(tweetId));
         model.put("onComment", true);
 
-        model.put("tweets", tweetService.getComments(tweetId));
-        ctx.render("templates/comments.peb", model);
+        model.put("tweets", commentService.getComments(tweetId));
+        ctx.render("templates/tweet/comments.peb", model);
     };
 
     public Handler retweet = ctx -> {
@@ -81,7 +88,7 @@ public class TwitterControllerAPI {
         System.err.println(tweetId);
         System.err.println(userId);
         System.err.println(t);
-        ctx.render("templates/retweet.peb", model);
+        ctx.render("templates/tweet/retweet.peb", model);
         ctx.status(201);
     };
 

@@ -1,7 +1,7 @@
 
 {% if onlyComment is null %}
     <h3>{{ tweet.userName}} post</h3>
-    {% include "templates/tweet.peb" %}
+    {% include "templates/tweet/tweet.peb" %}
 {% endif %}
 
 {% for tweet in tweets %}

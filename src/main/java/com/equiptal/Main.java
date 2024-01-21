@@ -3,11 +3,9 @@ package com.equiptal;
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 import com.equiptal.controller.TwitterController;
-import com.equiptal.controller.TwitterControllerAPI;
+import com.equiptal.controller.TwitterControllerTweet;
 import com.equiptal.otherServices.AppModule;
 import com.equiptal.otherServices.AuthImplementaion;
-import com.equiptal.service.TweetService;
-import com.equiptal.service.UserService;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -19,11 +17,13 @@ public class Main {
 
     public Main() {
         Injector injector = Guice.createInjector(new AppModule());
-        TweetService tweetService = injector.getInstance(TweetService.class);
-        userService = injector.getInstance(UserService.class);
+
         authImplementaion = injector.getInstance(AuthImplementaion.class);
-        twitterControllerAPI = injector.getInstance(TwitterControllerAPI.class);
+
+        // Controllers
+        twitterControllerAPI = injector.getInstance(TwitterControllerTweet.class);
         twitterController = injector.getInstance(TwitterController.class);
+
     }
 
     public void configureRoutes(Javalin app) {
@@ -35,7 +35,7 @@ public class Main {
                     post("/comment", twitterControllerAPI.comment);
                     post("/getComments", twitterControllerAPI.getTweetComments);
                     post("/retweet", twitterControllerAPI.retweet);
-                    post("/search", userService.search);
+                    post("/search", twitterController.search);
                     get("/getTweets", twitterController.getTweets);
                 });
 
@@ -67,9 +67,7 @@ public class Main {
 
     }
 
-    private TwitterControllerAPI twitterControllerAPI;
+    private TwitterControllerTweet twitterControllerAPI;
     private AuthImplementaion authImplementaion;
     private TwitterController twitterController;
-    private UserService userService;
-
 }

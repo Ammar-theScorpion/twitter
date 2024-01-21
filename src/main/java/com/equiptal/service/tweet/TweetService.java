@@ -1,14 +1,21 @@
-package com.equiptal.service;
+package com.equiptal.service.tweet;
 
 import java.util.List;
 
-import com.equiptal.DTO.CommentDTO;
 import com.equiptal.DTO.RetweetDTO;
 import com.equiptal.DTO.TweetDTO;
-import com.equiptal.model.DBConnection;
 import com.equiptal.model.TweetDAO;
 
+import jakarta.inject.Inject;
+
 public class TweetService {
+
+    private TweetDAO tweetDAO;
+
+    @Inject
+    public TweetService(TweetDAO tweetService) {
+        this.tweetDAO = tweetService;
+    }
 
     public TweetDTO insert(String tweet, Integer userId) {
         Integer id = tweetDAO.insert(tweet, userId);
@@ -19,29 +26,6 @@ public class TweetService {
         Integer id = tweetDAO.insertRetweet(tweetId, userId);
         System.err.println(id);
         return tweetDAO.findByIdRT(id);
-    }
-
-    public Integer giveLike(Integer tweetId, Integer userId) {
-        // check if you liked first;
-        if (!tweetDAO.noLikeForThisTweet(tweetId, userId))
-            tweetDAO.giveLike(tweetId, userId);
-        else {
-            tweetDAO.deleteLike(tweetId, userId);
-        }
-        return tweetDAO.likesCount(tweetId);
-    }
-
-    public Integer comment(Integer tweetId, Integer userId, String tweet) {
-        return tweetDAO.comment(tweetId, userId, tweet);
-    }
-
-    public List<CommentDTO> getComment(Integer tweetId) {
-        return tweetDAO.getComment(tweetId);
-    }
-
-    public List<CommentDTO> getComments(Integer tweetId) {
-        System.err.println(tweetDAO.getComments(tweetId));
-        return tweetDAO.getComments(tweetId);
     }
 
     public TweetDTO getTweet(Integer id) {
@@ -73,5 +57,4 @@ public class TweetService {
         return tweetDAO.getTweetOwner(tweetId);
     }
 
-    private TweetDAO tweetDAO = DBConnection.jdbi.onDemand(TweetDAO.class);
 }

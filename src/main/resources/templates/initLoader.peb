@@ -1,3 +1,0 @@
-<span hx-get="/" hx-trigger="load">
-    <img id="spinner" class="htmx-indicator" src="/img/user.png"/>
-</span>

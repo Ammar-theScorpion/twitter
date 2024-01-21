@@ -118,7 +118,7 @@
             </configuration>
 
             <executions>
-                <execution>
+                <execution> 
                     <?m2e execute onConfiguration?>
                     <id>flyway-migrate</id>
                     <phase>compile</phase>

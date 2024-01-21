@@ -1,4 +1,4 @@
-{% extends 'templates/main.html' %}
+{% extends 'templates/important/main.html' %}
     {% block title %}
         <title>signup</title>
     {% endblock title %}
