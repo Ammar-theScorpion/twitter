@@ -13,7 +13,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 
-public class TestSE {
+public class TestAuth {
 
     private static WebDriver driver;
 

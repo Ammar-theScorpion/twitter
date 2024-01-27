@@ -15,7 +15,7 @@
 						<textarea class="form-control" rows="5" id="comment" name="tweet"></textarea>
 					</div>
 					<div class="card-footer">
-						<button type="button" class="btn btn-secondary" 
+						<button id="submit_tweet" type="button" class="btn btn-secondary" 
 								hx-post="/api/tweet"
 								hx-trigger="click"
 								hx-target="#posts"
