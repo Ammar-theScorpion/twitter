@@ -1,7 +1,7 @@
 
 <form method="post" action="/{{auth_url}}" id="form">
     <img class="logo mb-4 text-center" src="/img/twitter.png" alt="twitter" width="72" height="72">
-    <h1 class="h3 mb-3 fw-normal text-center"> {{auth_type}}</h1>
+    <h1 id="auth_type" class="h3 mb-3 fw-normal text-center"> {{auth_type}}</h1>
 
     <div class="form-floating">
         <input required type="text" value="{{name}}" class="form-control" id="floatingInput" name="userName">
@@ -11,7 +11,7 @@
         <input required type="password" value="{{pass}}" class="form-control" id="floatingPassword" name="pass">
         <label for="floatingPassword">Password</label>
     </div>
-    <div id="error"> {{error}}</div>
+    <div id="error">{{error}}</div>
     <button class="w-100 btn btn-lg btn-primary"
         id="btn-submit"
         type="submit"

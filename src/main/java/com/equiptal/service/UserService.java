@@ -17,7 +17,7 @@ public class UserService {
     }
 
     public String createUser(String userName, String password) {
-        if (findByUser(userName, password) != null) { // or try/catch; check if the user is already ...
+        if (findIdByName(userName) != null) { // or try/catch; check if the user is already ...
             return userName + " is already used try:" + generateRecommendation(userName);
         }
         if (password.length() <= 3)
@@ -46,7 +46,15 @@ public class UserService {
     }
 
     private String generateRecommendation(String foundUserName) {
-        return foundUserName + "1";
+        // generate a unique name
+        int counter = 1;
+        String recommendedName = foundUserName;
+
+        while (findIdByName(recommendedName) != null) {
+            counter++;
+            recommendedName = foundUserName + counter;
+        }
+        return recommendedName;
     }
 
 }
